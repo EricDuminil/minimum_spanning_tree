@@ -7,6 +7,9 @@
 # See book Introduction to Algorithms by Cormen, Leiserson, Rivest, Stein
 # (MIT Press;McGraw Hill) Chapter 23, for discussion of minimum spanning trees.
 
+# Slightly modified by Eric Duminil, for use with Python 3.8 & Pygame 2.0.1
+# Date : January 5, 2021
+
 ###########################################################################
 ### License stuff                                                       ###
 ###########################################################################
@@ -129,6 +132,8 @@ def initialize_screen():
     global screen, background, size_x, size_y
     pygame.init()
 
+    ## FULLSCREEN seems to be buggy with pygame 2.0 + SDL (see https://github.com/pygame/pygame/issues/2118 )
+    ## So using windowed mode instead
     # get size of fullscreen display into size_x, size_y
     # modes = pygame.display.list_modes()    # defaults to fullscreen
     # modes.sort()                           # largest goes last
