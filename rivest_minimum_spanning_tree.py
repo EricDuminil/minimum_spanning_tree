@@ -1,4 +1,5 @@
-# mst.py
+# rivest_minimum_spanning_tree.py
+# Original name: mst.py
 # Author: Ronald L. Rivest
 # Date: April 7, 2006
 # Illustrates computations of minimum spanning tree;
