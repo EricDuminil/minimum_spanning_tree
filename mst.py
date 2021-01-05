@@ -45,11 +45,11 @@ import sys
 # globals
 
 balls = []
-number_balls = 7                 # starting value                   
+number_balls = 7                 # starting value
 ball_min_radius = 8.0            # pixels
 ball_max_radius = 32.0
 speed = 3.0                      # pixels / click
-balls_paused = False   
+balls_paused = False
 mst_edge_list = []
 
 ###########################################################################
@@ -77,8 +77,8 @@ show_edge_pause = 1.0            # how many seconds to pause as each edge is dis
 
 
 def set_color_scheme(scheme):
-    """ 
-    Set color scheme. 
+    """
+    Set color scheme.
     scheme = 0 (white background) or 1 (black background)
     """
     global line_color, background_color
@@ -157,7 +157,7 @@ def show_background():
     pygame.display.flip()
 
 def show_text_screen(msgs):
-    """ 
+    """
     Show a screen of text.
     Return True if user wishes to quit out of this text screen.
     """
@@ -166,7 +166,7 @@ def show_text_screen(msgs):
 
     y = 100
     for msg in msgs:
-        text = font.render(msg, 
+        text = font.render(msg,
                            1,             # antialias
                            (10, 10, 10))  # color
         textpos = text.get_rect()
@@ -190,8 +190,8 @@ def show_text_screen(msgs):
                 return show_info_screen()
 
 def show_welcome_screen():
-    """ 
-    Show initial welcome / help screen. 
+    """
+    Show initial welcome / help screen.
     """
 
     msgs = ["MST -- Minimum Spanning Tree Demo Program",
@@ -210,8 +210,8 @@ def show_welcome_screen():
     return show_text_screen(msgs)
 
 def show_help_screen():
-    """ 
-    Show help screen. 
+    """
+    Show help screen.
     Return True if user wishes to quit out of help screen.
     """
 
@@ -238,8 +238,8 @@ def show_help_screen():
     return show_text_screen(msgs)
 
 def show_info_screen():
-    """ 
-    Show info screen. 
+    """
+    Show info screen.
     Return True if user wishes to quit out of info screen.
     """
 
@@ -319,8 +319,8 @@ def display_balls_and_edges(balls, edge_list):
 ###########################################################################
 
 def handle_user_input():
-    """ 
-    Detect keypresses, etc., and handle them. 
+    """
+    Detect keypresses, etc., and handle them.
     Return True iff user requests program to quit
     """
     global number_balls, balls, speed, size_x, size_y
@@ -387,7 +387,7 @@ def compute_mst(balls):
     return mst_edge_list
 
 def prim(balls):
-    """ 
+    """
     Find mst of set of balls with Prim's algorithm.
     Return set of edges.
     """
@@ -399,7 +399,7 @@ def prim(balls):
 
     b0 = balls[0]
     Q = balls[1:]
-    for ball in Q: 
+    for ball in Q:
         ball.d = dist(ball,b0)
         ball.pred = b0
 
@@ -432,7 +432,7 @@ def move_balls():
         move_ball(b)
 
 def move_ball(b):
-    """ 
+    """
     Move ball b one step, and bounce off walls.
     """
     global speed, size_x, size_y
@@ -495,7 +495,7 @@ def vunit(v):
     return vscale(1.0/length,v)
 
 def handle_collisions(balls):
-    """ 
+    """
     Detect and handle all ball-to-ball collisions.
     This uses an all-pairs approach, which is OK for a
     reasonable number of balls.
@@ -509,7 +509,7 @@ def handle_collisions(balls):
                 collide(b0,b1)
 
 def collide(b1,b2):
-    """ 
+    """
     Collide balls b1 and b2.
 
     Net result is that velocities of b1 and b2 may be changed.
@@ -557,7 +557,7 @@ def collide(b1,b2):
 
 def main():
         global number_balls, balls, balls_paused, background_color
-        
+
         initialize_screen()
         initialize_background(background_color)
         pygame.key.set_repeat(500,300)   # for handling key repeats
@@ -565,7 +565,7 @@ def main():
         initialize_font()
         if show_welcome_screen():
             return
-        
+
         # Make balls
         balls = [Ball() for i in range(number_balls)]
 
@@ -582,4 +582,4 @@ def main():
 if __name__ == '__main__': main()
 
 
-            
+
