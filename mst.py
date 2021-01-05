@@ -133,9 +133,10 @@ def initialize_screen():
     modes = pygame.display.list_modes()    # defaults to fullscreen
     modes.sort()                           # largest goes last
     size_x, size_y = modes[-1]
+    size_x, size_y = 1024, 768
 
     screen = pygame.display.set_mode((size_x, size_y),
-                                     pygame.FULLSCREEN)
+                                     pygame.RESIZABLE)
     # following line is irrelevant for full-screen display
     pygame.display.set_caption('Minimum Spanning Tree program')
 
