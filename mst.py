@@ -569,8 +569,8 @@ def main():
         # Make balls
         balls = [Ball() for i in range(number_balls)]
 
-	# Event loop
-	while 1:
+        # Event loop
+        while 1:
 
                 if handle_user_input(): return
                 if not balls_paused:
