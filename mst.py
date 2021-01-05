@@ -37,6 +37,8 @@ Mail:  Room 32-G692, MIT, Cambridge, MA 02139
 ###########################################################################
 ###########################################################################
 
+from pygame.locals import *
+import pygame
 import math
 import random
 import time
@@ -56,15 +58,13 @@ mst_edge_list = []
 ### Display (pygame) related stuff                                      ###
 ###########################################################################
 
-import pygame
-from pygame.locals import *
 
 size_x = 1200                    # screen size dummy values, set to fullscreen size later
 size_y = 800
 
 color_scheme = 1                 # 0 = white background, 1 = black background
-background_color = [0,0,0]
-line_color = [250,250,250]
+background_color = [0, 0, 0]
+line_color = [250, 250, 250]
 
 line_width = 4
 
@@ -83,20 +83,21 @@ def set_color_scheme(scheme):
     """
     global line_color, background_color
     if scheme == 0:
-        line_color = [0,0,0]
-        background_color = [250,250,250]
+        line_color = [0, 0, 0]
+        background_color = [250, 250, 250]
     if scheme == 1:
-        line_color = [250,250,250]
-        background_color = [0,0,0]
+        line_color = [250, 250, 250]
+        background_color = [0, 0, 0]
+
 
 class Ball:
     """ Implements a point/ball/vertex """
 
     def __init__(self):
-        self.x = random.uniform(0.0,size_x)
-        self.y = random.uniform(0.0,size_y)
-        angle = random.uniform(0.0,math.pi)
-        ball_speed = random.uniform(0.0,2.0)
+        self.x = random.uniform(0.0, size_x)
+        self.y = random.uniform(0.0, size_y)
+        angle = random.uniform(0.0, math.pi)
+        ball_speed = random.uniform(0.0, 2.0)
         self.vx = math.sin(angle) * ball_speed
         self.vy = math.cos(angle) * ball_speed
         self.d = 0.0              # distance to tree in prim
@@ -104,23 +105,24 @@ class Ball:
         self.color = [120+int(random.random()*130),
                       120+int(random.random()*130),
                       120+int(random.random()*130)]
-        self.radius = int(random.uniform(ball_min_radius,ball_max_radius))
+        self.radius = int(random.uniform(ball_min_radius, ball_max_radius))
         self.mass = float(self.radius**2)
 
-    def draw(self,surface):
+    def draw(self, surface):
         """ Draw ball. """
         # colored portion
         pygame.draw.circle(surface,
                            self.color,
-                           [int(self.x),int(self.y)],
+                           [int(self.x), int(self.y)],
                            self.radius,
                            0)  # width (0 means fill circle)
         # circumference line
         pygame.draw.circle(surface,
                            line_color,
-                           [int(self.x),int(self.y)],
+                           [int(self.x), int(self.y)],
                            self.radius,
                            1)  # width
+
 
 def initialize_screen():
     """ Set up display screen. """
@@ -130,16 +132,18 @@ def initialize_screen():
     # get size of fullscreen display into size_x, size_y
     modes = pygame.display.list_modes()    # defaults to fullscreen
     modes.sort()                           # largest goes last
-    size_x,size_y = modes[-1]
+    size_x, size_y = modes[-1]
 
     screen = pygame.display.set_mode((size_x, size_y),
-                                     pygame.FULLSCREEN )
+                                     pygame.FULLSCREEN)
     # following line is irrelevant for full-screen display
     pygame.display.set_caption('Minimum Spanning Tree program')
+
 
 def initialize_font():
     global font
     font = pygame.font.Font(None, 36)
+
 
 def initialize_background(color):
     """ Set background to background_color. """
@@ -149,6 +153,7 @@ def initialize_background(color):
     background = background.convert()
     background.fill(color)
 
+
 def show_background():
     """ Write background onto screen and show it. """
     global background, screen
@@ -156,13 +161,14 @@ def show_background():
     screen.blit(background, (0, 0))
     pygame.display.flip()
 
+
 def show_text_screen(msgs):
     """
     Show a screen of text.
     Return True if user wishes to quit out of this text screen.
     """
     global font, background
-    initialize_background([250,250,250])
+    initialize_background([250, 250, 250])
 
     y = 100
     for msg in msgs:
@@ -189,6 +195,7 @@ def show_text_screen(msgs):
             elif event.type == KEYDOWN and event.key == K_F2:
                 return show_info_screen()
 
+
 def show_welcome_screen():
     """
     Show initial welcome / help screen.
@@ -208,6 +215,7 @@ def show_welcome_screen():
             "ESC quits",
             ]
     return show_text_screen(msgs)
+
 
 def show_help_screen():
     """
@@ -237,6 +245,7 @@ def show_help_screen():
             ]
     return show_text_screen(msgs)
 
+
 def show_info_screen():
     """
     Show info screen.
@@ -262,22 +271,23 @@ def show_info_screen():
             ]
     return show_text_screen(msgs)
 
+
 def display_edges(edge_list):
     """ Display list of edges. """
     global show_edges_kruskal, show_edge_pause, show_edges
     if show_edges_kruskal:
-        L = [(dist(b0,b1),b0,b1) for b0,b1 in edge_list]
+        L = [(dist(b0, b1), b0, b1) for b0, b1 in edge_list]
         L.sort()
-        edge_list = [(b0,b1) for d,b0,b1 in L]
+        edge_list = [(b0, b1) for d, b0, b1 in L]
     if show_edges_prim or show_edges_kruskal:
         show_background()
         time.sleep(show_edge_pause)
-    for b0,b1 in edge_list:
+    for b0, b1 in edge_list:
         if show_edges:
             pygame.draw.line(background,
                              line_color,
-                             (b0.x,b0.y),  # start
-                             (b1.x,b1.y),  # end
+                             (b0.x, b0.y),  # start
+                             (b1.x, b1.y),  # end
                              line_width)   # width
             display_dot_at_ball_center(b0)
             display_dot_at_ball_center(b1)
@@ -288,15 +298,17 @@ def display_edges(edge_list):
                 if handle_user_input():
                     sys.exit()
 
+
 def display_dot_at_ball_center(b):
     """ Display a nice dot at center of ball b. """
     global background, line_color
 
     pygame.draw.circle(background,
                        line_color,
-                       [int(b.x),int(b.y)],
+                       [int(b.x), int(b.y)],
                        7,
                        0)  # width (0 means fill circle)
+
 
 def display_balls_and_edges(balls, edge_list):
     """ Show balls and edges. """
@@ -307,7 +319,7 @@ def display_balls_and_edges(balls, edge_list):
         for b in balls:
             b.draw(background)
     if show_edges:
-        if show_edges_prim and len(balls)>0:
+        if show_edges_prim and len(balls) > 0:
             b = balls[0]
             display_dot_at_ball_center(b)
             time.sleep(show_edge_pause)
@@ -317,6 +329,7 @@ def display_balls_and_edges(balls, edge_list):
 ###########################################################################
 ### USER INPUT                                                          ###
 ###########################################################################
+
 
 def handle_user_input():
     """
@@ -345,19 +358,19 @@ def handle_user_input():
         elif event.type == KEYDOWN and event.key == K_UP:
             number_balls = max(number_balls+1,
                                int(number_balls*1.20))
-            while len(balls)<number_balls:
+            while len(balls) < number_balls:
                 balls.append(Ball())
         elif event.type == KEYDOWN and event.key == K_LEFT:
             speed /= 1.4
         elif event.type == KEYDOWN and event.key == K_RIGHT:
             speed *= 1.4
-            speed = min(speed,size_x/3,size_y/3)
+            speed = min(speed, size_x/3, size_y/3)
         elif event.type == KEYDOWN and event.key == K_b:
             show_balls = not show_balls
         elif event.type == KEYDOWN and event.key == K_e:
             show_edges = not show_edges
         elif event.type == KEYDOWN and event.key == K_c:
-            color_scheme = (1+color_scheme)%2
+            color_scheme = (1+color_scheme) % 2
             set_color_scheme(color_scheme)
         elif event.type == KEYDOWN and event.key == K_SPACE:
             balls_paused = not balls_paused
@@ -376,9 +389,11 @@ def handle_user_input():
 ### Routines related to computation of MST                                    ###
 #################################################################################
 
-def dist(b1,b2):
+
+def dist(b1, b2):
     """ Return distance between balls b1 and b2. """
     return (math.sqrt((b1.x-b2.x)**2 + (b1.y-b2.y)**2))
+
 
 def compute_mst(balls):
     """ Compute MST of given set of balls. """
@@ -386,13 +401,14 @@ def compute_mst(balls):
     mst_edge_list = prim(balls)
     return mst_edge_list
 
+
 def prim(balls):
     """
     Find mst of set of balls with Prim's algorithm.
     Return set of edges.
     """
 
-    if len(balls)==0:
+    if len(balls) == 0:
         return []
 
     mst_edge_list = []
@@ -400,7 +416,7 @@ def prim(balls):
     b0 = balls[0]
     Q = balls[1:]
     for ball in Q:
-        ball.d = dist(ball,b0)
+        ball.d = dist(ball, b0)
         ball.pred = b0
 
     while Q != []:
@@ -412,10 +428,10 @@ def prim(balls):
         Q.remove(closest_ball)
         b0 = closest_ball
         b1 = closest_ball.pred
-        mst_edge_list.append((b0,b1))
+        mst_edge_list.append((b0, b1))
         for ball in Q:
-            d = dist(ball,closest_ball)
-            if d<ball.d:
+            d = dist(ball, closest_ball)
+            if d < ball.d:
                 ball.d = d
                 ball.pred = closest_ball
 
@@ -425,11 +441,13 @@ def prim(balls):
 ### Routines related to ball motion and collision handling              ###
 ###########################################################################
 
+
 def move_balls():
     """ Move all balls. """
     global balls
     for b in balls:
         move_ball(b)
+
 
 def move_ball(b):
     """
@@ -453,7 +471,7 @@ def move_ball(b):
         b.vx = -b.vx
 
     bottom = 0.0
-    if b.y < bottom + r: # bounce off bottom wall
+    if b.y < bottom + r:  # bounce off bottom wall
         b.y = (bottom + r)+(bottom+r-b.y)
         b.vy = -b.vy
 
@@ -462,37 +480,45 @@ def move_ball(b):
         b.y = top - r-(b.y-(top-r))
         b.vy = -b.vy
 
-### Vector operations
+# Vector operations
 
-def vadd(v1,v2):
+
+def vadd(v1, v2):
     """ Return sum of vectors v1 and v2. """
-    return [a+b for a,b in zip(v1,v2)]
+    return [a+b for a, b in zip(v1, v2)]
 
-def vsub(v1,v2):
+
+def vsub(v1, v2):
     """ Return vector v1-v2 """
-    return [a-b for a,b in zip(v1,v2)]
+    return [a-b for a, b in zip(v1, v2)]
 
-def vscale(s,v):
+
+def vscale(s, v):
     """ Multiply vector v by the scalar s. """
     return [s*a for a in v]
+
 
 def vlensq(v):
     """ Return the length squared of vector v. """
     return sum([x*x for x in v])
 
+
 def vlen(v):
     """ Return the length of vector v. """
     return math.sqrt(vlensq(v))
 
-def vdot(v1,v2):
+
+def vdot(v1, v2):
     """ Return the dot product of vectors v1 and v2. """
-    return sum([a*b for a,b in zip(v1,v2)])
+    return sum([a*b for a, b in zip(v1, v2)])
+
 
 def vunit(v):
     """ Return unit vector in same direction as v. """
     length = vlen(v)
     assert length > 0.0
-    return vscale(1.0/length,v)
+    return vscale(1.0/length, v)
+
 
 def handle_collisions(balls):
     """
@@ -504,11 +530,12 @@ def handle_collisions(balls):
         b0 = balls[i]
         for j in range(i):
             b1 = balls[j]
-            d = dist(b0,b1)
-            if d<=b0.radius+b1.radius:
-                collide(b0,b1)
+            d = dist(b0, b1)
+            if d <= b0.radius+b1.radius:
+                collide(b0, b1)
 
-def collide(b1,b2):
+
+def collide(b1, b2):
     """
     Collide balls b1 and b2.
 
@@ -519,36 +546,39 @@ def collide(b1,b2):
 
     # ball 1: mass, position, velocity
     m1 = b1.mass
-    p1 = [b1.x,b1.y]
-    v1 = [b1.vx,b1.vy]
+    p1 = [b1.x, b1.y]
+    v1 = [b1.vx, b1.vy]
 
     # ball 2: mass, position, velocity
     m2 = b2.mass
-    p2 = [b2.x,b2.y]
-    v2 = [b2.vx,b2.vy]
+    p2 = [b2.x, b2.y]
+    v2 = [b2.vx, b2.vy]
 
     # center of mass: position, velocity
-    pc = vadd(vscale(m1/(m1+m2),p1),vscale(m2/(m1+m2),p2))
-    vc = vadd(vscale(m1/(m1+m2),v1),vscale(m2/(m1+m2),v2))
+    pc = vadd(vscale(m1/(m1+m2), p1), vscale(m2/(m1+m2), p2))
+    vc = vadd(vscale(m1/(m1+m2), v1), vscale(m2/(m1+m2), v2))
 
     # return if at same position; can't do anything
-    if p1 == p2: return
+    if p1 == p2:
+        return
 
-    u1 = vunit(vsub(p1,pc))      # unit vector towards m1 in cm coords
-    w1 = vsub(v1,vc)             # velocity of m1 in cm coords
-    z = vdot(w1,u1)              # amount of w1 in direction towards m1
-    if z >= 0.0: return          # can't collide; m1 moving away from cm
-    r1 = vscale(z,u1)            # velocity of m1 in cm coords along u1
-    s1 = vsub(w1,vscale(2.0,r1)) # post-collision velocity in cm coords
-    b1.vx, b1.vy = vadd(vc,s1)   # final velocity in global coords
+    u1 = vunit(vsub(p1, pc))      # unit vector towards m1 in cm coords
+    w1 = vsub(v1, vc)             # velocity of m1 in cm coords
+    z = vdot(w1, u1)              # amount of w1 in direction towards m1
+    if z >= 0.0:
+        return          # can't collide; m1 moving away from cm
+    r1 = vscale(z, u1)            # velocity of m1 in cm coords along u1
+    s1 = vsub(w1, vscale(2.0, r1))  # post-collision velocity in cm coords
+    b1.vx, b1.vy = vadd(vc, s1)   # final velocity in global coords
 
-    u2 = vunit(vsub(p2,pc))      # unit vector towards m2 in cm coords
-    w2 = vsub(v2,vc)             # velocity of m2 in cm coords
-    z = vdot(w2,u2)              # amount of w2 in direction towards m2
-    if z >= 0.0: return          # can't collide; m2 moving away from cm
-    r2 = vscale(z,u2)            # velocity of m2 in cm coords along u2
-    s2 = vsub(w2,vscale(2.0,r2)) # post-collision velocity in cm coords
-    b2.vx, b2.vy = vadd(vc,s2)   # final velocity in global coords
+    u2 = vunit(vsub(p2, pc))      # unit vector towards m2 in cm coords
+    w2 = vsub(v2, vc)             # velocity of m2 in cm coords
+    z = vdot(w2, u2)              # amount of w2 in direction towards m2
+    if z >= 0.0:
+        return          # can't collide; m2 moving away from cm
+    r2 = vscale(z, u2)            # velocity of m2 in cm coords along u2
+    s2 = vsub(w2, vscale(2.0, r2))  # post-collision velocity in cm coords
+    b2.vx, b2.vy = vadd(vc, s2)   # final velocity in global coords
 
 
 ###########################################################################
@@ -556,30 +586,30 @@ def collide(b1,b2):
 ###########################################################################
 
 def main():
-        global number_balls, balls, balls_paused, background_color
+    global number_balls, balls, balls_paused, background_color
 
-        initialize_screen()
-        initialize_background(background_color)
-        pygame.key.set_repeat(500,300)   # for handling key repeats
+    initialize_screen()
+    initialize_background(background_color)
+    pygame.key.set_repeat(500, 300)   # for handling key repeats
 
-        initialize_font()
-        if show_welcome_screen():
+    initialize_font()
+    if show_welcome_screen():
+        return
+
+    # Make balls
+    balls = [Ball() for i in range(number_balls)]
+
+    # Event loop
+    while 1:
+
+        if handle_user_input():
             return
-
-        # Make balls
-        balls = [Ball() for i in range(number_balls)]
-
-        # Event loop
-        while 1:
-
-                if handle_user_input(): return
-                if not balls_paused:
-                    move_balls()
-                    handle_collisions(balls)
-                mst_edge_list = compute_mst(balls)
-                display_balls_and_edges(balls, mst_edge_list)
-
-if __name__ == '__main__': main()
+        if not balls_paused:
+            move_balls()
+            handle_collisions(balls)
+        mst_edge_list = compute_mst(balls)
+        display_balls_and_edges(balls, mst_edge_list)
 
 
-
+if __name__ == '__main__':
+    main()
