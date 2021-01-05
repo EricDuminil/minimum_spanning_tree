@@ -130,13 +130,12 @@ def initialize_screen():
     pygame.init()
 
     # get size of fullscreen display into size_x, size_y
-    modes = pygame.display.list_modes()    # defaults to fullscreen
-    modes.sort()                           # largest goes last
-    size_x, size_y = modes[-1]
+    # modes = pygame.display.list_modes()    # defaults to fullscreen
+    # modes.sort()                           # largest goes last
+    # size_x, size_y = modes[-1]
     size_x, size_y = 1024, 768
 
-    screen = pygame.display.set_mode((size_x, size_y),
-                                     pygame.RESIZABLE)
+    screen = pygame.display.set_mode((size_x, size_y), pygame.RESIZABLE)
     # following line is irrelevant for full-screen display
     pygame.display.set_caption('Minimum Spanning Tree program')
 
@@ -384,6 +383,9 @@ def handle_user_input():
         elif event.type == KEYDOWN and event.key == K_n:
             show_edges_kruskal = False
             show_edges_prim = False
+        elif event.type == pygame.VIDEORESIZE:
+            size_x, size_y = event.w, event.h
+            initialize_background(background_color)
     return False
 
 #################################################################################
