@@ -1,5 +1,7 @@
 # Minimum Spanning Tree
 
+![mst_screenshot](./mst_screenshot.png)
+
 A slightly modified version of mst.py, written by Ronald L. Rivest.
 
 * Original name: mst.py
