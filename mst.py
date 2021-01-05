@@ -50,7 +50,7 @@ balls = []
 number_balls = 7                 # starting value
 ball_min_radius = 8.0            # pixels
 ball_max_radius = 32.0
-speed = 3.0                      # pixels / click
+speed = 0.6                      # pixels / click
 balls_paused = False
 mst_edge_list = []
 
